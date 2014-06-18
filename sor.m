@@ -1,6 +1,9 @@
-% sor.f -- Program to solve Laplace's equation in
+% sor.m -- Program to solve Laplace's equation in
 % generalized coordinates using SOR.  Solve for
 % potential flow over an airfoil.  Use an O-grid.
+%
+% Converted from sor.f
+%
 %    ni = number of points around the airfoil
 %    nj = number of radial points
 %
@@ -25,7 +28,7 @@
       write(6,*)' Enter choice:'
       read(5,*)irestart
 
-      if(irestart.eq.1)then
+      if(irestart==1)
          write(6,*)' Enter angle of attack (deg):'
          read(5,*)alpha
          pi = acos(-1.0)
@@ -33,32 +36,32 @@
          call initial(ni,nj,x,y,psi,alpha)
          itno_rst = 0
          open(unit=9,file='history.dat',status='unknown')
-      elseif(irestart.eq.2)then
+      elseif(irestart==2)
          call restart(ni,nj,itno_rst,psi,alpha)
          open(unit=9,file='history.dat',status='old',access='append')
       else
          write(6,*)'*** ERROR on input ***'
          stop
-      endif
+      end
 
 %...Enter overrelaxation parameter and number of iterations
 
       write(6,*)' Enter SOR overrelaxation parameter omega:'
       read(5,*)omega
 
-      if((omega.le.0.0).or.(omega.ge.2.0))then
+      if((omega<=0.0)||(omega>=2.0))
          write(6,*)'*** ERROR omega out of range ***'
          stop
-      elseif(omega.lt.1.0)then
+      elseif(omega<1.0)
          write(6,*)'*   WARNING:  using UNDER-relaxation *'
       endif
 
       write(6,*)' Enter number of SOR iterations:'
       read(5,*)itmax
 
-c***
-c***Start SOR iteration loop
-c***
+%***
+%***Start SOR iteration loop
+%***
 
       do itno = 1,itmax
 
@@ -612,21 +615,21 @@ c            psi(i,1) = psi(1,2)
       open(unit=13,file='v.dat')
       open(unit=14,file='cp.dat')
 
-      if((ni.lt.10).and.(ni.gt.2))then
+      if((ni<10)&&(ni>2))
          write(myformat,101)ni
 101      format('(',i1,'(3x,e15.7))')
-      elseif(ni.lt.100)then
+      elseif(ni<100)
          write(myformat,102)ni
 102      format('(',i2,'(3x,e15.7))')
-      elseif(ni.lt.1000)then
+      elseif(ni<1000)
          write(myformat,103)ni
 103      format('(',i3,'(3x,e15.7))')
-      elseif(ni.lt.10000)then
+      elseif(ni<10000)
          write(myformat,104)ni
 104      format('(',i4,'(3x,e15.7))')
       else
          write(6,*)'*** Error:  ni too large or too small ***'
-      endif
+      end
 
       do j = 1,nj
          write(11,myformat)(psi(i,j),i=1,ni)
