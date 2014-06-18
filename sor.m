@@ -21,15 +21,14 @@
       call get_coefs(ni,nj,x,y,xxi,xeta,yxi,yeta,jinv,a,b,c,d,e,cp)
 
 %...Choose what type of initial conditions to use
-
-      write(6,*)' Start SOR iteration from:'
-      write(6,*)'    [1] uniform flow initial conditions'
-      write(6,*)'    [2] restart file (from a previous run)'
-      write(6,*)' Enter choice:'
+      fprintf(' Start SOR iteration from:\n');
+      fprintf('    [1] uniform flow initial conditions\n');
+      fprintf('    [2] restart file (from a previous run)\n');
+      fprintf(' Enter choice:\n');
       read(5,*)irestart
 
       if(irestart==1)
-         write(6,*)' Enter angle of attack (deg):'
+         fprintf(' Enter angle of attack (deg):');
          read(5,*)alpha
          pi = acos(-1.0)
          alpha = alpha*pi/180.
@@ -40,23 +39,23 @@
          call restart(ni,nj,itno_rst,psi,alpha)
          open(unit=9,file='history.dat',status='old',access='append')
       else
-         write(6,*)'*** ERROR on input ***'
+         fprintf('*** ERROR on input ***\n');
          stop
       end
 
 %...Enter overrelaxation parameter and number of iterations
 
-      write(6,*)' Enter SOR overrelaxation parameter omega:'
+      fprintf(' Enter SOR overrelaxation parameter omega:'
       read(5,*)omega
 
       if((omega<=0.0)||(omega>=2.0))
-         write(6,*)'*** ERROR omega out of range ***'
+         fprintf('*** ERROR omega out of range ***'
          stop
       elseif(omega<1.0)
-         write(6,*)'*   WARNING:  using UNDER-relaxation *'
+         fprintf('*   WARNING:  using UNDER-relaxation *'
       end
 
-      write(6,*)' Enter number of SOR iterations:'
+      fprintf(' Enter number of SOR iterations:'
       read(5,*)itmax
 
 %***
@@ -151,8 +150,8 @@ c            psi(i,1) = psi(1,2)
          cl = cn*cos(alpha) - ca*sin(alpha)
          cd = cn*sin(alpha) + ca*cos(alpha)
 
-         write(6,*)' iteration:  ',itno_rst + itno,...
-           ',  Cl = ',cl,',  Cd = ',cd,', CmLE = ',cmle
+         fprintf(' iteration:  ',itno_rst + itno,...
+           ',  Cl = ',cl,',  Cd = ',cd,', CmLE = ',cmle); % don't know if this statement will work
          write(9,101)itno_rst+itno,cl,cd,cmle
 101      format(3x,i7,3(3x,e15.7))
 
@@ -197,7 +196,7 @@ c            psi(i,1) = psi(1,2)
 
       read(unit=7,end=101,fmt=*)dummy
       read(unit=8,end=101,fmt=*)dummy
-      write(6,*)%*** Mismatch between ni,nj and size of grid ***
+      fprintf('*** Mismatch between ni,nj and size of grid ***\n');
       stop
 
 101   continue
@@ -508,14 +507,14 @@ c            psi(i,1) = psi(1,2)
 %...Check to make sure we are at the end of the file
 
       read(unit=10,end=101)dummy
-      write(6,*)...
-     '*** Mismatch between ni,nj and size of restart file ***';
+      fprintf(...
+     '*** Mismatch between ni,nj and size of restart file ***\n');
       stop
 
 101   continue
       if((ni_rst~=ni)||(nj_rst~=nj))
-         write(6,*)...
-        '*** Error:  Mismatch in ni, nj and ni_rst, nj_rst ***';
+         fprintf(...
+        '*** Error:  Mismatch in ni, nj and ni_rst, nj_rst ***\n');
          stop
       end
 
@@ -628,7 +627,7 @@ c            psi(i,1) = psi(1,2)
          write(myformat,104)ni
 104      format('(',i4,'(3x,e15.7))')
       else
-         write(6,*)'*** Error:  ni too large or too small ***'
+         fprintf('*** Error:  ni too large or too small ***\n');
       end
 
       do j = 1,nj
