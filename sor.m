@@ -30,10 +30,10 @@
       if(irestart==1)
          fprintf(' Enter angle of attack (deg):');
          read(5,*)alpha
-         pi = acos(-1.0)
-         alpha = alpha*pi/180.
+         %pi = acos(-1.0); uneeded since matlab has built in pi()
+         alpha = alpha*pi()/180;
          call initial(ni,nj,x,y,psi,alpha)
-         itno_rst = 0
+         itno_rst = 0;
          open(unit=9,file='history.dat',status='unknown')
       elseif(irestart==2)
          call restart(ni,nj,itno_rst,psi,alpha)
@@ -45,17 +45,17 @@
 
 %...Enter overrelaxation parameter and number of iterations
 
-      fprintf(' Enter SOR overrelaxation parameter omega:'
+      fprintf(' Enter SOR overrelaxation parameter omega:\n');
       read(5,*)omega
 
       if((omega<=0.0)||(omega>=2.0))
-         fprintf('*** ERROR omega out of range ***'
+         fprintf('*** ERROR omega out of range ***\n');
          stop
       elseif(omega<1.0)
-         fprintf('*   WARNING:  using UNDER-relaxation *'
+         fprintf('*   WARNING:  using UNDER-relaxation *\n');
       end
 
-      fprintf(' Enter number of SOR iterations:'
+      fprintf(' Enter number of SOR iterations:\n');
       read(5,*)itmax
 
 %***
@@ -66,22 +66,22 @@
 
 %........Sweep over the interior points
 
-         do j = 2,nj-1
-         do i = 2,ni-1
-
-            psi(i,j) = (omega/(2.0*(a(i,j)+b(i,j))))*...
-              ( 0.25*c(i,j)*psi(i-1,j-1)...
-              + (b(i,j) - 0.5*e(i,j))*psi(i,j-1)...
-              - 0.25*c(i,j)*psi(i+1,j-1)...
-              + (a(i,j) - 0.5*d(i,j))*psi(i-1,j)...
-              + (a(i,j) + 0.5*d(i,j))*psi(i+1,j)...
-              - 0.25*c(i,j)*psi(i-1,j+1)...
-              + (b(i,j) + 0.5*e(i,j))*psi(i,j+1)...
-              + 0.25*c(i,j)*psi(i+1,j+1) )...
-              + (1.0 - omega)*psi(i,j);
-
-         enddo
-         enddo
+for j = 2:nj-1
+    for i = 2:ni-1
+        
+        psi(i,j) = (omega/(2.0*(a(i,j)+b(i,j))))*...
+            ( 0.25*c(i,j)*psi(i-1,j-1)...
+            + (b(i,j) - 0.5*e(i,j))*psi(i,j-1)...
+            - 0.25*c(i,j)*psi(i+1,j-1)...
+            + (a(i,j) - 0.5*d(i,j))*psi(i-1,j)...
+            + (a(i,j) + 0.5*d(i,j))*psi(i+1,j)...
+            - 0.25*c(i,j)*psi(i-1,j+1)...
+            + (b(i,j) + 0.5*e(i,j))*psi(i,j+1)...
+            + 0.25*c(i,j)*psi(i+1,j+1) )...
+            + (1.0 - omega)*psi(i,j);
+        
+    end
+end
 
 %........Sweep over the periodic boundary
 
