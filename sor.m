@@ -133,22 +133,22 @@ c            psi(i,1) = psi(1,2)
 %........Compute the pressure coefficient on the airfoil surface
 
          do i = 1,ni
-            cp(i,1) = 1.0 - (u(i,1)**2 + v(i,1)**2)
+            cp(i,1) = 1.0 - (u(i,1)^2 + v(i,1)^2);
          enddo
 
 %........Integrate Cp to get the lift coefficient, cl
 
-         cn = 0.0
-         ca = 0.0
-         cmle = 0.0
+         cn = 0.0;
+         ca = 0.0;
+         cmle = 0.0;
          do i = 1,ni-1
-            cn = cn - 0.5*(cp(i+1,1) + cp(i,1))*(x(i+1,1) - x(i,1))
-            ca = ca + 0.5*(cp(i+1,1) + cp(i,1))*(y(i+1,1) - y(i,1))
-            cmle = cmle + 0.5*(cp(i+1,1)*x(i+1,1) + cp(i,1)*x(i,1))
-     >         *(x(i+1,1) - x(i,1))
+            cn = cn - 0.5*(cp(i+1,1) + cp(i,1))*(x(i+1,1) - x(i,1));
+            ca = ca + 0.5*(cp(i+1,1) + cp(i,1))*(y(i+1,1) - y(i,1));
+            cmle = cmle + 0.5*(cp(i+1,1)*x(i+1,1) + cp(i,1)*x(i,1))...
+              *(x(i+1,1) - x(i,1));
          enddo
-         cl = cn*cos(alpha) - ca*sin(alpha)
-         cd = cn*sin(alpha) + ca*cos(alpha)
+         cl = cn*cos(alpha) - ca*sin(alpha);
+         cd = cn*sin(alpha) + ca*cos(alpha);
 
          fprintf(' iteration:  ',itno_rst + itno,...
            ',  Cl = ',cl,',  Cd = ',cd,', CmLE = ',cmle); % don't know if this statement will work
@@ -166,7 +166,7 @@ c            psi(i,1) = psi(1,2)
      >   psi,alpha,u,v)
       do i = 1,ni
       do j = 1,nj
-         cp(i,j) = 1.0 - (u(i,j)**2 + v(i,j)**2)
+         cp(i,j) = 1.0 - (u(i,j)^2 + v(i,j)^2)
       enddo
       enddo
 
@@ -309,30 +309,30 @@ c            psi(i,1) = psi(1,2)
 
       do j = 1,nj
       do i = 1,ni
-         r1 = -(yeta(i,j)*jinv(i,j))**2*a(i,j)...
-           + 2.0*yxi(i,j)*yeta(i,j)*jinv(i,j)**2*b(i,j)...
-           - (yxi(i,j)*jinv(i,j))**2*c(i,j);
-         r2 = -(yeta(i,j)*jinv(i,j))**2*d(i,j)...
-           + 2.0*yxi(i,j)*yeta(i,j)*jinv(i,j)**2*e(i,j)...
-           - (yxi(i,j)*jinv(i,j))**2*tmp(i,j);
+         r1 = -(yeta(i,j)*jinv(i,j))^2*a(i,j)...
+           + 2.0*yxi(i,j)*yeta(i,j)*jinv(i,j)^2*b(i,j)...
+           - (yxi(i,j)*jinv(i,j))^2*c(i,j);
+         r2 = -(yeta(i,j)*jinv(i,j))^2*d(i,j)...
+           + 2.0*yxi(i,j)*yeta(i,j)*jinv(i,j)^2*e(i,j)...
+           - (yxi(i,j)*jinv(i,j))^2*tmp(i,j);
          d1 = yeta(i,j)*jinv(i,j)*r1 - xeta(i,j)*jinv(i,j)*r2;
          e1 = -yxi(i,j)*jinv(i,j)*r1 + xxi(i,j)*jinv(i,j)*r2;
 
-         s1 = -(xeta(i,j)*jinv(i,j))**2*a(i,j)...
-           + 2.0*xxi(i,j)*xeta(i,j)*jinv(i,j)**2*b(i,j)...
-           - (xxi(i,j)*jinv(i,j))**2*c(i,j);
-         s2 = -(xeta(i,j)*jinv(i,j))**2*d(i,j)...
-           + 2.0*xxi(i,j)*xeta(i,j)*jinv(i,j)**2*e(i,j)...
-           - (xxi(i,j)*jinv(i,j))**2*tmp(i,j);
+         s1 = -(xeta(i,j)*jinv(i,j))^2*a(i,j)...
+           + 2.0*xxi(i,j)*xeta(i,j)*jinv(i,j)^2*b(i,j)...
+           - (xxi(i,j)*jinv(i,j))^2*c(i,j);
+         s2 = -(xeta(i,j)*jinv(i,j))^2*d(i,j)...
+           + 2.0*xxi(i,j)*xeta(i,j)*jinv(i,j)^2*e(i,j)...
+           - (xxi(i,j)*jinv(i,j))^2*tmp(i,j);
          d2 = yeta(i,j)*jinv(i,j)*s1 - xeta(i,j)*jinv(i,j)*s2;
          e2 = -yxi(i,j)*jinv(i,j)*s1 + xxi(i,j)*jinv(i,j)*s2;
 
          e(i,j) = e1 + e2;
          d(i,j) = d1 + d2;
          c(i,j) = -2.0*(yxi(i,j)*yeta(i,j) + xxi(i,j)*xeta(i,j))...
-           *jinv(i,j)**2;
-         b(i,j) = (yxi(i,j)*jinv(i,j))**2 + (xxi(i,j)*jinv(i,j))**2;
-         a(i,j) = (yeta(i,j)*jinv(i,j))**2 + (xeta(i,j)*jinv(i,j))**2;
+           *jinv(i,j)^2;
+         b(i,j) = (yxi(i,j)*jinv(i,j))^2 + (xxi(i,j)*jinv(i,j))^2;
+         a(i,j) = (yeta(i,j)*jinv(i,j))^2 + (xeta(i,j)*jinv(i,j))^2;
       enddo
       enddo
 
